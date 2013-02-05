@@ -145,7 +145,10 @@ class GaiaData(object):
         self.marionette.set_script_timeout(default_script_timeout)
 
     def get_setting(self, name):
-        return self.marionette.execute_async_script('return GaiaDataLayer.getSetting("%s")' % name, special_powers=True)
+        self.marionette.set_context("chrome")
+        value = self.marionette.execute_async_script('return GaiaDataLayer.getSetting("%s")' % name)
+        self.marionette.set_context("content")
+        return value
 
     @property
     def all_settings(self):
@@ -154,7 +157,9 @@ class GaiaData(object):
     def set_setting(self, name, value):
         import json
         value = json.dumps(value)
-        result = self.marionette.execute_async_script('return GaiaDataLayer.setSetting("%s", %s)' % (name, value), special_powers=True)
+        self.marionette.set_context("chrome")
+        result = self.marionette.execute_async_script('return GaiaDataLayer.setSetting("%s", %s)' % (name, value))
+        self.marionette.set_context("content")
         assert result, "Unable to change setting with name '%s' to '%s'" % (name, value)
 
     def set_volume(self, value):
