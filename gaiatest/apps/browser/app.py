@@ -55,12 +55,15 @@ class Browser(Base):
         Base.launch(self)
 
     def tap_go_button(self):
+        self.wait_for_element_displayed(*self._url_button_locator)
         self.marionette.tap(self.marionette.find_element(*self._url_button_locator))
 
     def tap_back_button(self):
+        self.wait_for_element_displayed(*self._back_button_locator)
         self.marionette.tap(self.marionette.find_element(*self._back_button_locator))
 
     def tap_forward_button(self):
+        self.wait_for_element_displayed(*self._forward_button_locator)
         self.marionette.tap(self.marionette.find_element(*self._forward_button_locator))
 
     def tap_bookmark_button(self):
@@ -82,6 +85,7 @@ class Browser(Base):
         self.switch_to_chrome()
 
     def type_bookmark_title(self, value):
+        self.wait_for_element_displayed(*self._bookmark_title_input_locator)
         element = self.marionette.find_element(*self._bookmark_title_input_locator)
         element.clear()
         element.send_keys(value)
@@ -96,13 +100,19 @@ class Browser(Base):
 
     @property
     def is_awesome_bar_visible(self):
-        return self.marionette.find_element(*self._awesome_bar_locator).is_displayed()
+        try:
+            self.wait_for_element_displayed(*self._awesome_bar_locator)
+            return True
+        except:
+            return False
 
     def tap_tab_badge_button(self):
+        self.wait_for_element_displayed(*self._tab_badge_locator)
         self.marionette.tap(self.marionette.find_element(*self._tab_badge_locator))
         self.wait_for_element_present(*self._tabs_list_locator)
 
     def tap_add_new_tab_button(self):
+        self.wait_for_element_displayed(*self._new_tab_button_locator)
         self.marionette.tap(self.marionette.find_element(*self._new_tab_button_locator))
 
     @property
