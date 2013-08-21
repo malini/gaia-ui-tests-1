@@ -2,7 +2,6 @@
 # License, v. 2.0. If a copy of the MPL was not distributed with this
 # file, You can obtain one at http://mozilla.org/MPL/2.0/.
 
-import time
 from gaiatest import GaiaTestCase
 from gaiatest.apps.testapp.app import TestContainer
 
@@ -14,17 +13,16 @@ class TestModal(GaiaTestCase):
         self.container.launch()
         # create an element and attach a modal trigger to it
         self.marionette.execute_script("""
-        var modalButton= document.createElement("button");
-        modalButton.id = "modalButton";
-        modalButton.onclick = function() { 
-            console.log('firing');
-            confirm("test");
-        };
-        var newContent = document.createTextNode("Tap here to trigger a modal");
-        modalButton.appendChild(newContent);
-        let container = document.getElementById('test-container');
-        document.body.insertBefore(modalButton, container);
-        """)
+var modalButton= document.createElement("button");
+modalButton.id = "modalButton";
+modalButton.onclick = function() { 
+  confirm("test");
+};
+var newContent = document.createTextNode("Tap here to trigger a modal");
+modalButton.appendChild(newContent);
+let container = document.getElementById('test-container');
+document.body.insertBefore(modalButton, container);
+""")
         modalButton = self.marionette.find_element("id", "modalButton")
         origin_url = self.marionette.get_url()
         modalButton.tap()
